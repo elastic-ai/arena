@@ -125,6 +125,8 @@ type TrainingJobInfo struct {
 
 	// CreationTimestamp stores the creation timestamp of job
 	CreationTimestamp int64 `json:"creationTimestamp" yaml:"creationTimestamp"`
+
+	QueueName string `json:"queueName" yaml:"queueName"`
 }
 
 // TrainingJobStatus defines all the kinds of JobStatus
@@ -150,7 +152,8 @@ type TrainingJobInstance struct {
 	// the status of of instance
 	Status string `json:"status"`
 	// the name of instance
-	Name string `json:"name"`
+	Name      string `json:"name"`
+	QueueName string `json:"queueName"`
 	// the age of instance
 	Age string `json:"age"`
 	// the node instance runs on

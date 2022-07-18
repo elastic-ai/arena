@@ -98,7 +98,7 @@ func DisplayTrainingJobList(jobInfoList []TrainingJob, format string, allNamespa
 		if allNamespaces {
 			header = append(header, "NAMESPACE")
 		}
-		header = append(header, []string{"NAME", "STATUS", "TRAINER", "DURATION", "GPU(Requested)", "GPU(Allocated)", "NODE"}...)
+		header = append(header, []string{"NAME", "STATUS", "TRAINER", "DURATION", "GPU(Requested)", "GPU(Allocated)", "QUEUE", "NODE"}...)
 		PrintLine(w, header...)
 		for _, jobInfo := range jobInfos {
 			hostIP := "N/A"
@@ -121,6 +121,10 @@ func DisplayTrainingJobList(jobInfoList []TrainingJob, format string, allNamespa
 			if jobInfo.Status == types.TrainingJobPending || jobInfo.Status == types.TrainingJobRunning {
 				allocatedGPUs = fmt.Sprintf("%v", jobInfo.AllocatedGPU)
 			}
+			queueName := "N/A"
+			if jobInfo.QueueName != "" {
+				queueName = jobInfo.QueueName
+			}
 			items = append(items, []string{
 				jobInfo.Name,
 				fmt.Sprintf("%v", jobInfo.Status),
@@ -128,6 +132,7 @@ func DisplayTrainingJobList(jobInfoList []TrainingJob, format string, allNamespa
 				util.ShortHumanDuration(time.Duration(duration) * time.Second),
 				fmt.Sprintf("%v", jobInfo.RequestGPU),
 				allocatedGPUs,
+				queueName,
 				hostIP,
 			}...)
 			PrintLine(w, items...)

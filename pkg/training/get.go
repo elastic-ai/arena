@@ -49,6 +49,7 @@ var getJobTemplate = `
 Name:      %v
 Status:    %v
 Namespace: %v
+Queue:     %v
 Priority:  %v
 Trainer:   %v
 Duration:  %v
@@ -182,7 +183,7 @@ func PrintTrainingJob(job TrainingJob, format string, showEvents bool, showGPUs 
 
 func printSingleJobHelper(job *types.TrainingJobInfo, resouce []Resource, showEvents bool, showGPU bool) {
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-	lines := []string{"", "Instances:", "  NAME\tSTATUS\tAGE\tIS_CHIEF\tGPU(Requested)\tNODE"}
+	lines := []string{"", "Instances:", "  NAME\tSTATUS\tAGE\tIS_CHIEF\tGPU(Requested)\tQUEUE\tNODE"}
 	lines = append(lines, "  ----\t------\t---\t--------\t--------------\t----")
 	totalRequestGPUs := 0
 	totalAllocatedGPUs := 0
@@ -195,6 +196,10 @@ func printSingleJobHelper(job *types.TrainingJobInfo, resouce []Resource, showEv
 		if len(hostIP) == 0 {
 			hostIP = "N/A"
 		}
+		queueName := instance.QueueName
+		if queueName == "" {
+			queueName = "N/A"
+		}
 		var duration int64
 		var err error
 		job.Duration = strings.Replace(job.Duration, "s", "", -1)
@@ -203,12 +208,13 @@ func printSingleJobHelper(job *types.TrainingJobInfo, resouce []Resource, showEv
 			log.Debugf("failed to parse duration: %v", err)
 
 		}
-		lines = append(lines, fmt.Sprintf("  %v\t%v\t%v\t%v\t%v\t%v",
+		lines = append(lines, fmt.Sprintf("  %v\t%v\t%v\t%v\t%v\t%v\t%v",
 			instance.Name,
 			instance.Status,
 			util.ShortHumanDuration(time.Duration(duration)*time.Second),
 			instance.IsChief,
 			instance.RequestGPUs,
+			queueName,
 			hostIP,
 		))
 	}
@@ -240,6 +246,7 @@ func printSingleJobHelper(job *types.TrainingJobInfo, resouce []Resource, showEv
 		job.Name,
 		job.Status,
 		job.Namespace,
+		job.QueueName,
 		job.Priority,
 		strings.ToUpper(string(job.Trainer)),
 		util.ShortHumanDuration(time.Duration(duration)*time.Second),

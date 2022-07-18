@@ -33,3 +33,7 @@ type BasicJobInfo struct {
 func (j *BasicJobInfo) Resources() []Resource {
 	return j.resources
 }
+
+func (j *BasicJobInfo) QueueName() string {
+	return ""
+}

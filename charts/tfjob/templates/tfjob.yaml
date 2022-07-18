@@ -24,10 +24,12 @@ metadata:
 spec:
 {{- if .Values.cleanPodPolicy }}
 {{- if eq "None" $cleanPodPolicy }}
-  cleanPodPolicy: None
+  runPolicy:
+    cleanPodPolicy: None
 {{- end }}
 {{- if eq "Running" $cleanPodPolicy }}
-  cleanPodPolicy: Running
+  runPolicy:
+    cleanPodPolicy: Running
 {{- end }}
 {{- end }}
   tfReplicaSpecs:

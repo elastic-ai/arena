@@ -65,6 +65,10 @@ func (tj *TensorFlowJob) Name() string {
 	return tj.name
 }
 
+func (tj *TensorFlowJob) QueueName() string {
+	return tj.tfjob.Annotations["kueue.x-k8s.io/queue-name"]
+}
+
 // Uid returns the TensorflowJob uid
 func (tj *TensorFlowJob) Uid() string {
 	return string(tj.tfjob.UID)
