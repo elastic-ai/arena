@@ -74,6 +74,8 @@ type TrainingJob interface {
 	GetPriorityClass() string
 
 	GetTrainJob() interface{}
+
+	QueueName() string
 }
 
 type Trainer interface {

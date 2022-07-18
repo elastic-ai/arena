@@ -124,6 +124,7 @@ func BuildJobInfo(job TrainingJob, showGPUs bool, services []*v1.Service, nodes 
 			IsChief:           isChief,
 			RequestGPUs:       count,
 			GPUMetrics:        gpuMetrics,
+			QueueName:         pod.Annotations["kueue.x-k8s.io/queue-name"],
 			CreationTimestamp: pod.CreationTimestamp.Unix(),
 		})
 	}
@@ -142,6 +143,7 @@ func BuildJobInfo(job TrainingJob, showGPUs bool, services []*v1.Service, nodes 
 		Instances:    instances,
 		RequestGPU:   job.RequestedGPU(),
 		AllocatedGPU: job.AllocatedGPU(),
+		QueueName:    job.QueueName(),
 	}
 
 	if job.StartTime() != nil {

@@ -73,9 +73,6 @@ type CommonSubmitArgs struct {
 	// EnableRDMA enable rdma or not,match option --rdma
 	EnableRDMA bool `yaml:"enableRDMA"`
 
-	// EnableQueue enables the feature to queue jobs after they are scheduled.
-	EnableQueue bool `yaml:"enableQueue"`
-
 	// UseENI defines using eni or not
 	UseENI bool `yaml:"useENI"`
 
@@ -108,6 +105,9 @@ type CommonSubmitArgs struct {
 
 	// HelmOptions stores the helm options
 	HelmOptions []string `yaml:"-"`
+
+	// QueueName is the task queue for job
+	QueueName string `yaml:"queueName"`
 }
 
 // DataDirVolume defines the volume of kubernetes

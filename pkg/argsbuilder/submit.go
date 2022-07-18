@@ -121,7 +121,7 @@ func (s *SubmitArgsBuilder) AddCommandFlags(command *cobra.Command) {
 	// use priority
 	command.Flags().StringVarP(&s.args.PriorityClassName, "priority", "p", "", "priority class name")
 	// enable Queue
-	command.Flags().BoolVar(&s.args.EnableQueue, "queue", false, "enables the feature to queue jobs after they are scheduled (Kube-queue needs to be pre-installed https://github.com/kube-queue/kube-queue)")
+	command.Flags().StringVar(&s.args.QueueName, "queue", "", "the queue name for the tfjob")
 	// add option --toleration,its' value will be get from viper
 	command.Flags().StringArrayVar(&tolerations, "toleration", []string{}, `tolerate some k8s nodes with taints,usage: "--toleration taint-key" or "--toleration all" `)
 	// add option --selector,its' value will be get from viper
@@ -330,11 +330,11 @@ func (s *SubmitArgsBuilder) setAnnotations() error {
 
 // setQueue is used to add annotation for suspend status
 func (s *SubmitArgsBuilder) setQueue() error {
-	if s.args.EnableQueue {
+	if s.args.QueueName != "" {
 		if s.args.Annotations == nil {
 			s.args.Annotations = map[string]string{}
 		}
-		s.args.Annotations[jobSuspend] = "true"
+		s.args.Annotations[QueueAnnotation] = s.args.QueueName
 	}
 	return nil
 }
